@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>استمارة حجز الخدمات - شركة الحلول المستقبلية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy:       #0d1b3e;
+      --navy-mid:   #152756;
+      --navy-light: #1e3a6e;
+      --gold:       #c9a84c;
+      --gold-light: #e2c47a;
+      --gold-pale:  #f5e9c8;
+      --cream:      #fdfaf3;
+      --white:      #ffffff;
+      --text-dark:  #0d1b3e;
+      --text-mid:   #4a5568;
+      --text-light: #8898aa;
+      --border:     #dde3f0;
+      --error:      #c0392b;
+      --success:    #1a7a4a;
+      --shadow-sm:  0 2px 8px rgba(13,27,62,0.08);
+      --shadow-md:  0 8px 32px rgba(13,27,62,0.14);
+      --shadow-lg:  0 20px 60px rgba(13,27,62,0.18);
+      --radius:     14px;
+      --radius-sm:  8px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Cairo', 'Tajawal', sans-serif;
+      background: var(--navy);
+      min-height: 100vh;
+      direction: rtl;
+      overflow-x: hidden;
+    }
+
+    /* ─── Decorative Background ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 10%, rgba(201,168,76,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 90%, rgba(30,58,110,0.8) 0%, transparent 60%),
+        linear-gradient(160deg, #0a1628 0%, #0d1b3e 40%, #0f2245 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 60px,
+          rgba(201,168,76,0.03) 60px,
+          rgba(201,168,76,0.03) 61px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 60px,
+          rgba(201,168,76,0.03) 60px,
+          rgba(201,168,76,0.03) 61px
+        );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page-wrapper {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      padding: 40px 20px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ─── Header ─── */
+    .page-header {
+      text-align: center;
+      margin-bottom: 36px;
+      animation: fadeDown 0.7s ease both;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(201,168,76,0.12);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 50px;
+      padding: 8px 22px;
+      margin-bottom: 20px;
+    }
+
+    .brand-badge .dot {
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    .brand-badge span {
+      color: var(--gold-light);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    .page-title {
+      font-family: 'Cairo', sans-serif;
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+
+    .page-title span {
+      color: var(--gold);
+    }
+
+    .page-subtitle {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.55);
+      font-weight: 400;
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ─── Progress Steps ─── */
+    .progress-track {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 32px;
+      animation: fadeDown 0.7s 0.15s ease both;
+    }
+
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+    }
+
+    .step-circle {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 800;
+      font-family: 'Tajawal', sans-serif;
+      border: 2px solid rgba(201,168,76,0.25);
+      background: rgba(13,27,62,0.8);
+      color: rgba(255,255,255,0.4);
+      transition: all 0.4s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-circle.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--navy);
+      box-shadow: 0 0 0 4px rgba(201,168,76,0.2);
+    }
+
+    .step-circle.done {
+      background: rgba(201,168,76,0.2);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .step-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.35);
+      font-family: 'Tajawal', sans-serif;
+      white-space: nowrap;
+    }
+
+    .step-label.active { color: var(--gold-light); }
+    .step-label.done   { color: rgba(201,168,76,0.6); }
+
+    .step-line {
+      width: 60px;
+      height: 2px;
+      background: rgba(201,168,76,0.15);
+      margin: 0 4px;
+      margin-bottom: 22px;
+      transition: background 0.4s ease;
+    }
+
+    .step-line.done { background: var(--gold); }
+
+    /* ─── Form Card ─── */
+    .form-card {
+      width: 100%;
+      max-width: 780px;
+      background: rgba(255,255,255,0.97);
+      border-radius: 24px;
+      box-shadow: var(--shadow-lg), 0 0 0 1px rgba(201,168,76,0.15);
+      overflow: hidden;
+      animation: fadeUp 0.7s 0.25s ease both;
+    }
+
+    /* ─── Form Steps ─── */
+    .form-step {
+      display: none;
+      animation: stepIn 0.4s ease;
+    }
+    .form-step.active { display: block; }
+
+    /* ─── Section Header ─── */
+    .section-header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      padding: 28px 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section-header::after {
+      content: '';
+      position: absolute;
+      left: -20px;
+      bottom: -30px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: rgba(201,168,76,0.08);
+      pointer-events: none;
+    }
+
+    .section-header::before {
+      content: '';
+      position: absolute;
+      right: 30px;
+      top: -10px;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(201,168,76,0.06);
+      pointer-events: none;
+    }
+
+    .section-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(201,168,76,0.15);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      border: 1px solid rgba(201,168,76,0.3);
+    }
+
+    .section-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--gold);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .section-title {
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 3px;
+    }
+
+    .section-desc {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.5);
+      font-weight: 400;
+    }
+
+    /* ─── Form Body ─── */
+    .form-body {
+      padding: 32px 36px;
+    }
+
+    .fields-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .field-full  { grid-column: 1 / -1; }
+    .field-half  { grid-column: span 1; }
+
+    /* ─── Field Group ─── */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      font-family: 'Tajawal', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .field-label .req {
+      color: var(--gold);
+      font-size: 0.9rem;
+    }
+
+    .field-hint {
+      font-size: 0.73rem;
+      color: var(--text-light);
+      margin-top: -2px;
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    /* ─── Inputs ─── */
+    .field-input,
+    .field-select,
+    .field-textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: 'Cairo', 'Tajawal', sans-serif;
+      font-size: 0.88rem;
+      color: var(--text-dark);
+      background: #f8fafd;
+      transition: all 0.25s ease;
+      outline: none;
+      direction: rtl;
+    }
+
+    .field-input::placeholder,
+    .field-textarea::placeholder {
+      color: #b0bec5;
+      font-size: 0.83rem;
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    .field-input:focus,
+    .field-select:focus,
+    .field-textarea:focus {
+      border-color: var(--navy-light);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(21,39,86,0.08);
+    }
+
+    .field-input.error,
+    .field-select.error,
+    .field-textarea.error {
+      border-color: var(--error);
+      background: #fff8f7;
+    }
+
+    .field-input.valid,
+    .field-select.valid,
+    .field-textarea.valid {
+      border-color: var(--success);
+      background: #f6fdf9;
+    }
+
+    .field-textarea {
+      resize: vertical;
+      min-height: 100px;
+      line-height: 1.7;
+    }
+
+    .field-select {
+      appearance: none;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230d1b3e' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: left 14px center;
+      padding-left: 36px;
+    }
+
+    /* ─── Date/Time row ─── */
+    .datetime-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    /* ─── Input with icon ─── */
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-wrapper .input-icon {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .input-wrapper .input-icon svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--text-light);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .input-wrapper .field-input,
+    .input-wrapper .field-select {
+      padding-right: 42px;
+    }
+
+    .input-wrapper .status-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .input-wrapper .status-icon.visible { opacity: 1; }
+
+    .input-wrapper .status-icon svg {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .status-icon.ok svg  { stroke: var(--success); }
+    .status-icon.err svg { stroke: var(--error); }
+
+    /* ─── Error message ─── */
+    .error-msg {
+      font-size: 0.73rem;
+      color: var(--error);
+      font-family: 'Tajawal', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .error-msg.visible { opacity: 1; }
+
+    /* ─── Region Tags ─── */
+    .region-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .region-tag {
+      padding: 7px 14px;
+      border-radius: 50px;
+      border: 1.5px solid var(--border);
+      font-size: 0.78rem;
+      font-weight: 600;
+      font-family: 'Tajawal', sans-serif;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: #f8fafd;
+      user-select: none;
+    }
+
+    .region-tag:hover {
+      border-color: var(--navy-light);
+      color: var(--navy);
+    }
+
+    .region-tag.selected {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: var(--white);
+      box-shadow: 0 3px 10px rgba(13,27,62,0.2);
+    }
+
+    /* ─── Service Cards ─── */
+    .service-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    .service-card {
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      background: #f8fafd;
+      position: relative;
+      user-select: none;
+    }
+
+    .service-card:hover {
+      border-color: var(--navy-mid);
+      background: white;
+    }
+
+    .service-card.selected {
+      border-color: var(--gold);
+      background: linear-gradient(135deg, #fffdf5, #fdf8e8);
+      box-shadow: 0 3px 14px rgba(201,168,76,0.18);
+    }
+
+    .service-card-check {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .service-card.selected .service-card-check {
+      background: var(--gold);
+      border-color: var(--gold);
+    }
+
+    .service-card.selected .service-card-check::after {
+      content: '';
+      width: 5px;
+      height: 8px;
+      border-right: 2px solid white;
+      border-bottom: 2px solid white;
+      transform: rotate(45deg) translate(-1px, -1px);
+      display: block;
+    }
+
+    .service-icon-box {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(13,27,62,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+      transition: background 0.2s;
+    }
+
+    .service-card.selected .service-icon-box {
+      background: rgba(201,168,76,0.15);
+    }
+
+    .service-icon-box svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--navy-mid);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke 0.2s;
+    }
+
+    .service-card.selected .service-icon-box svg { stroke: var(--gold); }
+
+    .service-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      font-family: 'Tajawal', sans-serif;
+      line-height: 1.3;
+    }
+
+    /* ─── Divider ─── */
+    .form-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 28px 0;
+    }
+
+    /* ─── Action Buttons ─── */
+    .form-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 36px 28px;
+      border-top: 1px solid var(--border);
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 28px;
+      border-radius: 50px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.25s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      color: white;
+      box-shadow: 0 6px 20px rgba(13,27,62,0.28);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(13,27,62,0.35);
+    }
+
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold) 0%, #b8923e 100%);
+      color: var(--navy);
+      box-shadow: 0 6px 20px rgba(201,168,76,0.35);
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(201,168,76,0.45);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text-mid);
+      border: 1.5px solid var(--border);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--navy-mid);
+      color: var(--navy);
+      background: rgba(13,27,62,0.04);
+    }
+
+    .btn svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .btn-submit {
+      min-width: 180px;
+      justify-content: center;
+    }
+
+    /* ─── Success Overlay ─── */
+    .success-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(10,18,40,0.85);
+      backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .success-overlay.show {
+      display: flex;
+    }
+
+    .success-card {
+      background: white;
+      border-radius: 24px;
+      padding: 48px 40px;
+      max-width: 460px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 30px 80px rgba(10,18,40,0.4);
+      animation: bounceIn 0.5s ease;
+    }
+
+    .success-ring {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #e8f8ef, #d0f0df);
+      border: 3px solid var(--success);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 0 0 8px rgba(26,122,74,0.08);
+    }
+
+    .success-ring svg {
+      width: 38px;
+      height: 38px;
+      stroke: var(--success);
+      fill: none;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .success-title {
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+    }
+
+    .success-text {
+      font-size: 0.9rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+
+    .success-ref {
+      display: inline-block;
+      background: var(--navy);
+      color: var(--gold-light);
+      padding: 6px 20px;
+      border-radius: 50px;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin: 12px 0 24px;
+      letter-spacing: 0.04em;
+    }
+
+    .success-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ─── Notification Bar ─── */
+    .notif-bar {
+      position: fixed;
+      top: 20px;
+      right: 50%;
+      transform: translateX(50%);
+      z-index: 200;
+      background: var(--navy);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+      border-left: 3px solid var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s ease;
+      white-space: nowrap;
+    }
+
+    .notif-bar.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .notif-bar svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--gold);
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    /* ─── Share Banner ─── */
+    .share-banner {
+      width: 100%;
+      max-width: 780px;
+      margin-top: 20px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: var(--radius);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      animation: fadeUp 0.7s 0.45s ease both;
+    }
+
+    .share-label {
+      font-family: 'Tajawal', sans-serif;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.5);
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .share-link-box {
+      flex: 1;
+      min-width: 200px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.7);
+      direction: ltr;
+      text-align: left;
+      user-select: all;
+      cursor: text;
+    }
+
+    .share-btns {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .share-btn {
+      padding: 7px 16px;
+      border-radius: 50px;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .share-btn-copy {
+      background: rgba(201,168,76,0.15);
+      color: var(--gold-light);
+      border: 1px solid rgba(201,168,76,0.3);
+    }
+
+    .share-btn-copy:hover { background: rgba(201,168,76,0.25); }
+
+    .share-btn-email {
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.7);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .share-btn-email:hover { background: rgba(255,255,255,0.14); }
+
+    .share-btn svg {
+      width: 13px;
+      height: 13px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ─── Summary Preview ─── */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .summary-item {
+      background: #f8fafd;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+    }
+
+    .summary-item-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-light);
+      font-family: 'Tajawal', sans-serif;
+      margin-bottom: 3px;
+    }
+
+    .summary-item-value {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      font-family: 'Cairo', sans-serif;
+    }
+
+    .summary-item.highlight {
+      background: linear-gradient(135deg, #fffdf5, #fdf8e8);
+      border-color: rgba(201,168,76,0.3);
+    }
+
+    .summary-item.highlight .summary-item-label { color: var(--gold); }
+    .summary-item.highlight .summary-item-value  { color: var(--navy); }
+
+    /* ─── Animations ─── */
+    @keyframes fadeDown  { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeUp    { from { opacity:0; transform:translateY(20px);  } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn    { from { opacity:0; } to { opacity:1; } }
+    @keyframes stepIn    { from { opacity:0; transform:translateX(16px); } to { opacity:1; transform:translateX(0); } }
+    @keyframes pulse     { 0%,100%{ opacity:1; transform:scale(1); } 50%{ opacity:0.6; transform:scale(1.3); } }
+
+    @keyframes bounceIn {
+      0%   { opacity:0; transform:scale(0.7); }
+      60%  { transform:scale(1.04); }
+      80%  { transform:scale(0.97); }
+      100% { opacity:1; transform:scale(1); }
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 640px) {
+      .page-wrapper { padding: 24px 12px 48px; }
+      .form-body    { padding: 22px 20px; }
+      .section-header { padding: 22px 20px; }
+      .form-actions { padding: 16px 20px 22px; flex-direction: column; }
+      .btn          { width: 100%; justify-content: center; }
+      .fields-grid  { grid-template-columns: 1fr; }
+      .field-half   { grid-column: span 1; }
+      .datetime-row { grid-template-columns: 1fr; }
+      .step-line    { width: 30px; }
+      .service-cards { grid-template-columns: 1fr 1fr; }
+      .summary-grid  { grid-template-columns: 1fr; }
+      .success-card { padding: 36px 24px; }
+      .share-banner { flex-direction: column; align-items: flex-start; }
+      .share-link-box { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Notification Bar -->
+<div class="notif-bar" id="notifBar">
+  <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.95 10.8 19.79 19.79 0 01.88 2.18 2 2 0 012.88 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L7.09 7.09a16 16 0 006.29 6.29l1.45-1.45a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.09z"/></svg>
+  <span id="notifText">جاري معالجة طلبك...</span>
+</div>
+
+<!-- Success Overlay -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-card">
+    <div class="success-ring">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="success-title">تم استلام طلبك بنجاح!</div>
+    <p class="success-text">شكراً لتواصلك مع شركة الحلول المستقبلية. سيتم مراجعة طلبكم والتواصل معكم في أقرب وقت ممكن.</p>
+    <div class="success-ref" id="refNumber">رقم المرجع: FS-2026-0001</div>
+    <p class="success-text" style="font-size:0.8rem; color:var(--text-light);">تم إرسال نسخة تأكيد إلى بريدكم الإلكتروني</p>
+    <div class="success-actions">
+      <button class="btn btn-primary" onclick="resetForm()">
+        <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+        تقديم طلب جديد
+      </button>
+      <button class="btn btn-outline" onclick="window.print()">
+        <svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        طباعة
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="page-wrapper">
+
+  <!-- Header -->
+  <header class="page-header">
+    <div class="brand-badge">
+      <span class="dot"></span>
+      <span>شركة الحلول المستقبلية &mdash; منظومة الحجوزات</span>
+      <span class="dot"></span>
+    </div>
+    <h1 class="page-title">استمارة <span>حجز الخدمات</span></h1>
+    <p class="page-subtitle">نموذج موحد لاستقبال طلبات الجمعيات وتنظيم مواعيد تقديم الخدمات</p>
+  </header>
+
+  <!-- Progress Steps -->
+  <div class="progress-track">
+    <div class="step-item">
+      <div class="step-circle active" id="circle-1">1</div>
+      <div class="step-label active" id="label-1">معلومات الجمعية</div>
+    </div>
+    <div class="step-line" id="line-1"></div>
+    <div class="step-item">
+      <div class="step-circle" id="circle-2">2</div>
+      <div class="step-label" id="label-2">تفاصيل الخدمة</div>
+    </div>
+    <div class="step-line" id="line-2"></div>
+    <div class="step-item">
+      <div class="step-circle" id="circle-3">3</div>
+      <div class="step-label" id="label-3">بيانات التواصل</div>
+    </div>
+    <div class="step-line" id="line-3"></div>
+    <div class="step-item">
+      <div class="step-circle" id="circle-4">4</div>
+      <div class="step-label" id="label-4">المراجعة</div>
+    </div>
+  </div>
+
+  <!-- Form Card -->
+  <div class="form-card">
+    <form id="mainForm" novalidate>
+
+      <!-- ─── STEP 1: Association Info ─── -->
+      <div class="form-step active" id="step-1">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <div class="section-title">معلومات الجمعية</div>
+          <div class="section-desc">يرجى تعبئة البيانات الأساسية للجمعية المتقدمة بالطلب</div>
+        </div>
+        <div class="form-body">
+          <div class="fields-grid">
+
+            <div class="field-group field-full">
+              <label class="field-label">وصف الموضوع أو الطلب <span class="req">*</span></label>
+              <span class="field-hint">اكتب وصفاً مختصراً يوضح هدف الطلب والخدمة المطلوبة</span>
+              <textarea class="field-textarea" id="description" placeholder="مثال: نحتاج إلى تنظيم ورشة عمل توعوية لأعضاء الجمعية في مجال ريادة الأعمال..." rows="4"></textarea>
+              <span class="error-msg" id="err-description">هذا الحقل مطلوب</span>
+            </div>
+
+            <div class="field-group field-full">
+              <label class="field-label">اسم الجمعية <span class="req">*</span></label>
+              <div class="input-wrapper">
+                <span class="input-icon">
+                  <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                </span>
+                <input type="text" class="field-input" id="assocName" placeholder="الاسم الرسمي للجمعية" />
+                <span class="status-icon" id="si-assocName">
+                  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+              </div>
+              <span class="error-msg" id="err-assocName">يرجى إدخال اسم الجمعية</span>
+            </div>
+
+            <div class="field-group field-full">
+              <label class="field-label">المنطقة الجغرافية <span class="req">*</span></label>
+              <span class="field-hint">حددي المنطقة التي تتبعها الجمعية</span>
+              <div class="region-tags" id="regionTags">
+                <div class="region-tag" onclick="selectRegion(this)" data-value="الرياض">الرياض</div>
+                <div class="region-tag" onclick="selectRegion(this)" data-value="مكة المكرمة">مكة المكرمة</div>
+                <div class="region-tag" onclick="selectRegion(this)" data-value="المدينة المنورة">المدينة المنورة</div>
+                <div class="region-tag" onclick="selectRegion(this)" data-value="المنطقة الشرقية">المنطقة الشرقية</div>
+                <div class="region-tag" onclick="selectRegion(this)" data-value="عسير">عسير</div>
+                <div class="region-tag" onclick="selectRegion(this)" data-value="تبوك">تبوك</div>
+                <div class="region-tag" onclick="selectRegion(this)" data-value="حائل">حائل</div>
+                <div class="region-tag" onclick="selectRegion(this)" data-value="الحدود الشمالية">الحدود الشمالية</div>
+                <div class="region-tag" onclick="selectRegion(this)" data-value="جازان">جازان</div>
+                <div class="region-tag" onclick="selectRegion(this)" data-value="نجران">نجران</div>
+                <div class="region-tag" onclick="selectRegion(this)" data-value="الباحة">الباحة</div>
+                <div class="region-tag" onclick="selectRegion(this)" data-value="الجوف">الجوف</div>
+                <div class="region-tag" onclick="selectRegion(this)" data-value="القصيم">القصيم</div>
+              </div>
+              <input type="hidden" id="region" />
+              <span class="error-msg" id="err-region">يرجى اختيار المنطقة الجغرافية</span>
+            </div>
+
+          </div>
+        </div>
+        <div class="form-actions">
+          <div></div>
+          <button type="button" class="btn btn-primary" onclick="nextStep(1)">
+            التالي
+            <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ─── STEP 2: Service Details ─── -->
+      <div class="form-step" id="step-2">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14M12 2v2m0 16v2M2 12h2m16 0h2"/></svg>
+          </div>
+          <div class="section-title">تفاصيل الخدمة والموعد</div>
+          <div class="section-desc">اختر الخدمة المطلوبة وحدد الموعد المناسب</div>
+        </div>
+        <div class="form-body">
+
+          <div class="field-group" style="margin-bottom:22px;">
+            <label class="field-label">الخدمة المطلوبة <span class="req">*</span></label>
+            <span class="field-hint">انقر على الخدمة التي ترغب في حجزها</span>
+            <div class="service-cards" id="serviceCards">
+              <div class="service-card" onclick="selectService(this)" data-value="برامج تدريبية">
+                <div class="service-card-check"></div>
+                <div class="service-icon-box">
+                  <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                </div>
+                <div class="service-name">برامج تدريبية</div>
+              </div>
+              <div class="service-card" onclick="selectService(this)" data-value="ورش عمل">
+                <div class="service-card-check"></div>
+                <div class="service-icon-box">
+                  <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                </div>
+                <div class="service-name">ورش عمل</div>
+              </div>
+              <div class="service-card" onclick="selectService(this)" data-value="استشارات تنظيمية">
+                <div class="service-card-check"></div>
+                <div class="service-icon-box">
+                  <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                </div>
+                <div class="service-name">استشارات تنظيمية</div>
+              </div>
+              <div class="service-card" onclick="selectService(this)" data-value="تطوير المحتوى">
+                <div class="service-card-check"></div>
+                <div class="service-icon-box">
+                  <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                </div>
+                <div class="service-name">تطوير المحتوى</div>
+              </div>
+              <div class="service-card" onclick="selectService(this)" data-value="دعم مؤسسي">
+                <div class="service-card-check"></div>
+                <div class="service-icon-box">
+                  <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                </div>
+                <div class="service-name">دعم مؤسسي</div>
+              </div>
+              <div class="service-card" onclick="selectService(this)" data-value="تقنية وأنظمة">
+                <div class="service-card-check"></div>
+                <div class="service-icon-box">
+                  <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                </div>
+                <div class="service-name">تقنية وأنظمة</div>
+              </div>
+              <div class="service-card" onclick="selectService(this)" data-value="فعاليات ومؤتمرات">
+                <div class="service-card-check"></div>
+                <div class="service-icon-box">
+                  <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+                <div class="service-name">فعاليات ومؤتمرات</div>
+              </div>
+              <div class="service-card" onclick="selectService(this)" data-value="تقارير وأبحاث">
+                <div class="service-card-check"></div>
+                <div class="service-icon-box">
+                  <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                </div>
+                <div class="service-name">تقارير وأبحاث</div>
+              </div>
+            </div>
+            <input type="hidden" id="service" />
+            <span class="error-msg" id="err-service">يرجى اختيار خدمة من القائمة أعلاه</span>
+          </div>
+
+          <div class="form-divider"></div>
+
+          <div class="fields-grid">
+            <div class="field-group field-full">
+              <label class="field-label">الموعد المقترح <span class="req">*</span></label>
+              <span class="field-hint">اختر التاريخ والوقت المناسبين لتقديم الخدمة</span>
+              <div class="datetime-row">
+                <div class="input-wrapper">
+                  <span class="input-icon">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  </span>
+                  <input type="date" class="field-input" id="serviceDate" style="padding-right:42px;" />
+                  <span class="status-icon" id="si-serviceDate">
+                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
+                </div>
+                <div class="input-wrapper">
+                  <span class="input-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  </span>
+                  <input type="time" class="field-input" id="serviceTime" style="padding-right:42px;" />
+                  <span class="status-icon" id="si-serviceTime">
+                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
+                </div>
+              </div>
+              <span class="error-msg" id="err-datetime">يرجى تحديد التاريخ والوقت</span>
+            </div>
+
+            <div class="field-group field-full">
+              <label class="field-label">ملاحظات إضافية على الموعد</label>
+              <textarea class="field-textarea" id="dateNotes" placeholder="مثال: يفضل أن يكون الموعد في الفترة الصباحية، أو أن يمتد لمدة 3 ساعات..." rows="3" style="min-height:80px;"></textarea>
+            </div>
+          </div>
+
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" onclick="prevStep(2)">
+            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            السابق
+          </button>
+          <button type="button" class="btn btn-primary" onclick="nextStep(2)">
+            التالي
+            <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ─── STEP 3: Contact Info ─── -->
+      <div class="form-step" id="step-3">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.95 10.8 19.79 19.79 0 01.88 2.18 2 2 0 012.88 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L7.09 7.09a16 16 0 006.29 6.29l1.45-1.45a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.09z"/></svg>
+          </div>
+          <div class="section-title">بيانات الشخص المخول بالتواصل</div>
+          <div class="section-desc">معلومات المندوب المفوض من الجمعية للتواصل والمتابعة</div>
+        </div>
+        <div class="form-body">
+          <div class="fields-grid">
+
+            <div class="field-group field-full">
+              <label class="field-label">الاسم الكامل <span class="req">*</span></label>
+              <div class="input-wrapper">
+                <span class="input-icon">
+                  <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </span>
+                <input type="text" class="field-input" id="contactName" placeholder="الاسم الرباعي للشخص المخول" />
+                <span class="status-icon" id="si-contactName">
+                  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+              </div>
+              <span class="error-msg" id="err-contactName">يرجى إدخال الاسم الكامل</span>
+            </div>
+
+            <div class="field-group field-half">
+              <label class="field-label">رقم الهاتف <span class="req">*</span></label>
+              <div class="input-wrapper">
+                <span class="input-icon">
+                  <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.95 10.8 19.79 19.79 0 01.88 2.18 2 2 0 012.88 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L7.09 7.09a16 16 0 006.29 6.29l1.45-1.45a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.09z"/></svg>
+                </span>
+                <input type="tel" class="field-input" id="phone" placeholder="05XXXXXXXX" dir="ltr" style="text-align:right;" />
+                <span class="status-icon" id="si-phone">
+                  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+              </div>
+              <span class="error-msg" id="err-phone">رقم الهاتف غير صحيح (مثال: 0512345678)</span>
+            </div>
+
+            <div class="field-group field-half">
+              <label class="field-label">البريد الإلكتروني <span class="req">*</span></label>
+              <div class="input-wrapper">
+                <span class="input-icon">
+                  <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </span>
+                <input type="email" class="field-input" id="email" placeholder="example@association.org" dir="ltr" style="text-align:right;" />
+                <span class="status-icon" id="si-email">
+                  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+              </div>
+              <span class="error-msg" id="err-email">البريد الإلكتروني غير صحيح</span>
+            </div>
+
+            <div class="field-group field-full">
+              <label class="field-label">المسمى الوظيفي في الجمعية</label>
+              <div class="input-wrapper">
+                <span class="input-icon">
+                  <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+                </span>
+                <input type="text" class="field-input" id="jobTitle" placeholder="مثال: مدير عام، رئيس مجلس الإدارة..." />
+              </div>
+            </div>
+
+          </div>
+
+          <div class="form-divider"></div>
+
+          <div style="background:#f0f4ff; border:1px solid #dde3f0; border-radius:10px; padding:14px 18px; display:flex; gap:12px; align-items:flex-start;">
+            <svg width="18" height="18" viewBox="0 0 24 24" style="stroke:#152756;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;margin-top:2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <p style="font-size:0.79rem; color:#4a5568; line-height:1.7; font-family:'Tajawal',sans-serif;">
+              ستُرسل رسالة تأكيد تلقائية إلى البريد الإلكتروني المُدخل فور استلام الطلب، تتضمن رقم المرجع وتفاصيل الحجز.
+            </p>
+          </div>
+
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" onclick="prevStep(3)">
+            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            السابق
+          </button>
+          <button type="button" class="btn btn-primary" onclick="nextStep(3)">
+            مراجعة الطلب
+            <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ─── STEP 4: Review ─── -->
+      <div class="form-step" id="step-4">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          </div>
+          <div class="section-title">مراجعة الطلب وتأكيده</div>
+          <div class="section-desc">تحقق من صحة البيانات قبل إرسال الطلب</div>
+        </div>
+        <div class="form-body">
+
+          <div class="summary-grid" id="summaryGrid">
+            <!-- Filled dynamically -->
+          </div>
+
+          <div class="form-divider"></div>
+
+          <div style="display:flex; align-items:flex-start; gap:12px; background:#fffbf0; border:1px solid rgba(201,168,76,0.3); border-radius:10px; padding:14px 18px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" style="stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;margin-top:2px;"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <p style="font-size:0.79rem; color:#7a6020; line-height:1.7; font-family:'Tajawal',sans-serif;">
+              بالضغط على "إرسال الطلب" فإنك توافق على استلام شركة الحلول المستقبلية لبياناتك واستخدامها لأغراض تقديم الخدمة والتواصل معك. سيتواصل معك فريقنا خلال 24-48 ساعة عمل لتأكيد الحجز.
+            </p>
+          </div>
+
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" onclick="prevStep(4)">
+            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            تعديل البيانات
+          </button>
+          <button type="submit" class="btn btn-gold btn-submit" id="submitBtn">
+            <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            إرسال الطلب
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- Share Banner -->
+  <div class="share-banner">
+    <span class="share-label">مشاركة النموذج:</span>
+    <div class="share-link-box" id="formUrl">https://futuresolutions.sa/booking-form?ref=assoc2026</div>
+    <div class="share-btns">
+      <button class="share-btn share-btn-copy" onclick="copyLink()">
+        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        نسخ الرابط
+      </button>
+      <button class="share-btn share-btn-email" onclick="shareEmail()">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        مشاركة بالبريد
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  /* ─── State ─── */
+  let currentStep = 1;
+  let selectedRegion  = '';
+  let selectedService = '';
+
+  /* ─── Date min ─── */
+  const dateInput = document.getElementById('serviceDate');
+  const today = new Date();
+  today.setDate(today.getDate() + 1);
+  dateInput.min = today.toISOString().split('T')[0];
+
+  /* ─── Region Selection ─── */
+  function selectRegion(el) {
+    document.querySelectorAll('.region-tag').forEach(t => t.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedRegion = el.dataset.value;
+    document.getElementById('region').value = selectedRegion;
+    hideError('region');
+  }
+
+  /* ─── Service Selection ─── */
+  function selectService(el) {
+    document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedService = el.dataset.value;
+    document.getElementById('service').value = selectedService;
+    hideError('service');
+  }
+
+  /* ─── Error helpers ─── */
+  function showError(id, msg) {
+    const el = document.getElementById('err-' + id);
+    if (el) { el.textContent = msg || el.textContent; el.classList.add('visible'); }
+    const inp = document.getElementById(id);
+    if (inp) { inp.classList.add('error'); inp.classList.remove('valid'); }
+    const si = document.getElementById('si-' + id);
+    if (si) { si.className = 'status-icon err visible'; }
+  }
+
+  function hideError(id) {
+    const el = document.getElementById('err-' + id);
+    if (el) el.classList.remove('visible');
+    const inp = document.getElementById(id);
+    if (inp) { inp.classList.remove('error'); inp.classList.add('valid'); }
+    const si = document.getElementById('si-' + id);
+    if (si) { si.className = 'status-icon ok visible'; }
+  }
+
+  /* ─── Validation ─── */
+  function validateStep(step) {
+    let valid = true;
+
+    if (step === 1) {
+      const desc = document.getElementById('description').value.trim();
+      if (!desc) { showError('description', 'هذا الحقل مطلوب'); valid = false; }
+      else hideError('description');
+
+      const name = document.getElementById('assocName').value.trim();
+      if (!name) { showError('assocName', 'يرجى إدخال اسم الجمعية'); valid = false; }
+      else hideError('assocName');
+
+      if (!selectedRegion) { showError('region', 'يرجى اختيار المنطقة الجغرافية'); valid = false; }
+      else hideError('region');
+    }
+
+    if (step === 2) {
+      if (!selectedService) { showError('service', 'يرجى اختيار خدمة من القائمة أعلاه'); valid = false; }
+      else hideError('service');
+
+      const d = document.getElementById('serviceDate').value;
+      const t = document.getElementById('serviceTime').value;
+      if (!d || !t) { showError('datetime', 'يرجى تحديد التاريخ والوقت'); valid = false; }
+      else hideError('datetime');
+    }
+
+    if (step === 3) {
+      const cn = document.getElementById('contactName').value.trim();
+      if (!cn) { showError('contactName', 'يرجى إدخال الاسم الكامل'); valid = false; }
+      else hideError('contactName');
+
+      const ph = document.getElementById('phone').value.trim();
+      const phoneReg = /^(05|5)[0-9]{8}$/;
+      if (!phoneReg.test(ph.replace(/\s/g,''))) { showError('phone', 'رقم الهاتف غير صحيح (مثال: 0512345678)'); valid = false; }
+      else hideError('phone');
+
+      const em = document.getElementById('email').value.trim();
+      const emailReg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailReg.test(em)) { showError('email', 'البريد الإلكتروني غير صحيح'); valid = false; }
+      else hideError('email');
+    }
+
+    return valid;
+  }
+
+  /* ─── Navigation ─── */
+  function goToStep(n) {
+    document.getElementById('step-' + currentStep).classList.remove('active');
+    document.getElementById('circle-' + currentStep).classList.remove('active');
+    document.getElementById('label-' + currentStep).classList.remove('active');
+
+    if (n > currentStep) {
+      document.getElementById('circle-' + currentStep).classList.add('done');
+      document.getElementById('label-' + currentStep).classList.add('done');
+      if (currentStep < 4) {
+        document.getElementById('line-' + currentStep).classList.add('done');
+      }
+    } else {
+      document.getElementById('circle-' + currentStep).classList.remove('done');
+      document.getElementById('label-' + currentStep).classList.remove('done');
+    }
+
+    currentStep = n;
+    document.getElementById('step-' + currentStep).classList.add('active');
+    document.getElementById('circle-' + currentStep).classList.add('active');
+    document.getElementById('label-' + currentStep).classList.add('active');
+
+    if (currentStep === 4) buildSummary();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function nextStep(from) {
+    if (!validateStep(from)) return;
+    goToStep(from + 1);
+  }
+
+  function prevStep(from) {
+    goToStep(from - 1);
+  }
+
+  /* ─── Build Summary ─── */
+  function buildSummary() {
+    const d = document.getElementById('serviceDate').value;
+    const t = document.getElementById('serviceTime').value;
+    let dateStr = '';
+    if (d) {
+      const dt = new Date(d);
+      dateStr = dt.toLocaleDateString('ar-SA', { year:'numeric', month:'long', day:'numeric' });
+    }
+    let timeStr = '';
+    if (t) {
+      const [hh,mm] = t.split(':');
+      const h = parseInt(hh);
+      const ampm = h < 12 ? 'صباحاً' : 'مساءً';
+      const h12 = h % 12 || 12;
+      timeStr = h12 + ':' + mm + ' ' + ampm;
+    }
+
+    const items = [
+      { label: 'اسم الجمعية',        value: document.getElementById('assocName').value,    highlight: true  },
+      { label: 'المنطقة الجغرافية',  value: selectedRegion,                                 highlight: false },
+      { label: 'الخدمة المطلوبة',    value: selectedService,                                highlight: true  },
+      { label: 'تاريخ الخدمة',       value: dateStr,                                        highlight: false },
+      { label: 'وقت الخدمة',         value: timeStr,                                        highlight: false },
+      { label: 'المسؤول عن التواصل', value: document.getElementById('contactName').value,  highlight: true  },
+      { label: 'رقم الهاتف',         value: document.getElementById('phone').value,         highlight: false },
+      { label: 'البريد الإلكتروني',  value: document.getElementById('email').value,         highlight: false },
+    ];
+
+    const grid = document.getElementById('summaryGrid');
+    grid.innerHTML = items.map(i => `
+      <div class="summary-item ${i.highlight ? 'highlight' : ''}">
+        <div class="summary-item-label">${i.label}</div>
+        <div class="summary-item-value">${i.value || '---'}</div>
+      </div>
+    `).join('');
+  }
+
+  /* ─── Submit ─── */
+  document.getElementById('mainForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = `
+      <svg viewBox="0 0 24 24" style="animation:spin 1s linear infinite;width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
+        <path d="M21 12a9 9 0 11-6.219-8.56"/>
+      </svg>
+      جاري الإرسال...
+    `;
+
+    showNotif('جاري معالجة طلبكم...');
+
+    setTimeout(() => {
+      const ref = 'FS-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+      document.getElementById('refNumber').textContent = 'رقم المرجع: ' + ref;
+      document.getElementById('successOverlay').classList.add('show');
+      showNotif('تم استلام طلبكم بنجاح. رقم المرجع: ' + ref);
+      btn.disabled = false;
+      btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> إرسال الطلب`;
+    }, 2200);
+  });
+
+  /* ─── Reset ─── */
+  function resetForm() {
+    document.getElementById('mainForm').reset();
+    selectedRegion = '';
+    selectedService = '';
+    document.querySelectorAll('.region-tag').forEach(t => t.classList.remove('selected'));
+    document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('.error-msg').forEach(e => e.classList.remove('visible'));
+    document.querySelectorAll('.field-input, .field-select, .field-textarea').forEach(i => {
+      i.classList.remove('error','valid');
+    });
+    document.querySelectorAll('.status-icon').forEach(s => s.className = 'status-icon');
+    for (let i = 1; i <= 4; i++) {
+      document.getElementById('circle-'+i).className = 'step-circle';
+      document.getElementById('label-'+i).className = 'step-label';
+    }
+    if (document.getElementById('line-1')) document.getElementById('line-1').classList.remove('done');
+    if (document.getElementById('line-2')) document.getElementById('line-2').classList.remove('done');
+    if (document.getElementById('line-3')) document.getElementById('line-3').classList.remove('done');
+
+    currentStep = 1;
+    document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+    document.getElementById('step-1').classList.add('active');
+    document.getElementById('circle-1').classList.add('active');
+    document.getElementById('label-1').classList.add('active');
+
+    document.getElementById('successOverlay').classList.remove('show');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ─── Notification ─── */
+  function showNotif(msg) {
+    const bar = document.getElementById('notifBar');
+    document.getElementById('notifText').textContent = msg;
+    bar.classList.add('show');
+    setTimeout(() => bar.classList.remove('show'), 3800);
+  }
+
+  /* ─── Share ─── */
+  function copyLink() {
+    const url = document.getElementById('formUrl').textContent;
+    navigator.clipboard.writeText(url).then(() => showNotif('تم نسخ رابط النموذج'));
+  }
+
+  function shareEmail() {
+    const sub  = encodeURIComponent('استمارة حجز خدمات شركة الحلول المستقبلية');
+    const body = encodeURIComponent('يسعدنا دعوتكم لتعبئة استمارة حجز الخدمات:\nhttps://futuresolutions.sa/booking-form?ref=assoc2026');
+    window.location.href = `mailto:?subject=${sub}&body=${body}`;
+  }
+
+  /* ─── Live Validation ─── */
+  document.getElementById('phone').addEventListener('input', function() {
+    const v = this.value.trim().replace(/\s/g,'');
+    if (/^(05|5)[0-9]{8}$/.test(v)) hideError('phone');
+  });
+
+  document.getElementById('email').addEventListener('input', function() {
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value.trim())) hideError('email');
+  });
+
+  document.getElementById('assocName').addEventListener('input', function() {
+    if (this.value.trim().length > 0) hideError('assocName');
+  });
+
+  document.getElementById('contactName').addEventListener('input', function() {
+    if (this.value.trim().length > 0) hideError('contactName');
+  });
+
+  /* ─── Spin keyframe ─── */
+  const style = document.createElement('style');
+  style.textContent = '@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }';
+  document.head.appendChild(style);
+</script>
+</body>
+</html>
